@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taça das Casas - Visualização</title>
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #121212;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding-top: 50px;
+    }
+
+    h1 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 2.5rem;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .trophy-emoji {
+        font-size: 2.2rem;
+    }
+
+    .main-container {
+        display: flex;
+        background: #1e1e1e;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    .axis-y {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 400px; /* Altura da área de barras */
+        padding-right: 15px;
+        border-right: 3px solid #444;
+        color: #aaa;
+        font-weight: bold;
+        text-align: right;
+        margin-bottom: 70px; /* Espaço para alinhar com os símbolos */
+    }
+
+    .chart-area {
+        display: flex;
+        align-items: flex-end; /* Garante que as colunas fiquem no fundo da área */
+        gap: 30px;
+        padding: 0 30px;
+        height: 400px; /* Altura da área de barras */
+        border-bottom: 3px solid #444; /* Linha do zero */
+        margin-bottom: 70px; /* Espaço para os símbolos abaixo da linha */
+    }
+
+    .house-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80px;
+        height: 100%; /* Ocupa a altura total da área de gráfico */
+        position: relative;
+    }
+
+    .bar {
+        width: 60px;
+        height: 100%; /* Ocupa toda a altura da coluna para ter o trilho cinza */
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end; /* Preenchimento começa do fundo (zero) */
+        position: relative; /* Contexto para o score-text absoluto */
+    }
+
+    .fill {
+        width: 100%;
+        height: 0%; /* JS vai alterar isso */
+        position: relative;
+        transition: height 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        border-radius: 5px 5px 0 0;
+    }
+
+    .score-text {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        bottom: 100%;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #fff;
+        font-size: 1.2rem;
+        text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Cores Temáticas */
+    .grif .fill { background: linear-gradient(#ae0001, #740001); }
+    .sons .fill { background: linear-gradient(#2a623d, #1a472a); }
+    .corv .fill { background: linear-gradient(#222f5b, #0e1a40); }
+    .lufa .fill { background: linear-gradient(#ecb939, #f0c75e); }
+
+    .fill::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        animation: shine 2s infinite;
+        border-radius: 5px 5px 0 0;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* Estilo de Líder com Glow Amarelo */
+    .leader .fill {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+        border: 2px solid gold;
+    }
+
+    /* Posicionamento dos Símbolos abaixo da linha do zero */
+    .crest {
+        font-size: 2.5rem;
+        position: absolute;
+        top: 100%; /* Inicia logo após o fim da house-col (abaixo da linha zero) */
+        margin-top: 15px; /* Pequeno espaçamento da linha */
+    }
+</style>
+</head>
+<body>
+
+<h1>
+    <span class="trophy-emoji"><img src="./CASAS/taca.png" alt="Taça das Casas" "56,5" height="69"></span>
+    TAÇA DAS CASAS
+</h1>
+
+<div class="main-container">
+    <div class="axis-y">
+        <span>1000</span>
+        <span>900</span>
+        <span>800</span>
+        <span>700</span>
+        <span>600</span>
+        <span>500</span>
+        <span>400</span>
+        <span>300</span>
+        <span>200</span>
+        <span>100</span>
+        <span>0</span>
+    </div>
+
+    <div class="chart-area">
+        <div class="house-col">
+            <div id="bar-grif" class="bar grif">
+                <div class="fill"><span class="score-text">0</span></div>
+            </div>
+            <div class="crest"><img src="./CASAS/2grifinolia.png" alt="Grifinolia" "56,5" height="69"></div>
+        </div>
+
+        <div class="house-col">
+            <div id="bar-sons" class="bar sons">
+                <div class="fill"><span class="score-text">0</span></div>
+            </div>
+            <div class="crest"><img src="./CASAS/2Sonseriana.png" alt="Sonseriana" width="56,5" height="69"></div>
+        </div>
+
+        <div class="house-col">
+            <div id="bar-corv" class="bar corv">
+                <div class="fill"><span class="score-text">0</span></div>
+            </div>
+            <div class="crest"><img src="./CASAS/2Corvinal.png" alt="Corvinal" width="56,5" height="69"></div>
+        </div>
+
+        <div class="house-col">
+            <div id="bar-lufa" class="bar lufa">
+                <div class="fill"><span class="score-text">0</span></div>
+            </div>
+            <div class="crest"><img src="./CASAS/2lufa-lufa.png" alt="Lufa-Lufa" width="56,5" height="69"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const maxPoints = 1000;
+    
+    // Altere os valores aqui para atualizar o gráfico
+    const houses = {
+        "bar-grif": 500,
+        "bar-sons": 500,
+        "bar-corv": 600,
+        "bar-lufa": 500
+    };
+
+    function updateDisplay(id) {
+        const barElement = document.getElementById(id);
+        const fill = barElement.querySelector(".fill");
+        const text = barElement.querySelector(".score-text");
+        
+        const pts = Math.min(houses[id], maxPoints);
+        const percent = (pts / maxPoints) * 100;
+        
+        fill.style.height = percent + "%";
+        text.innerText = pts;
+        
+        reorderRanking();
+    }
+
+    function reorderRanking() {
+        const scores = Object.values(houses);
+        const maxScore = Math.max(...scores);
+        
+        for (let id in houses) {
+            const el = document.getElementById(id);
+            el.classList.remove("leader");
+            if (houses[id] === maxScore && maxScore > 0) {
+                el.classList.add("leader");
+            }
+        }
+    }
+
+    window.onload = () => {
+        // Pequeno delay para garantir que a animação de subida ocorra após o load
+        setTimeout(() => {
+            for (let id in houses) {
+                updateDisplay(id);
+            }
+        }, 100);
+    };
+</script>
+
+</body>
+</html>
